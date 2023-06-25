@@ -25,7 +25,7 @@ final class MainViewController: UIViewController {
         //view.backgroundColor = .white
         service = CalcService(displayView: self)
         mainView.keyboardView.delegate = self
-        mainView.displayView.setValue(value: service?.currentNumber ?? "")
+        //mainView.displayView.setValue(value: service?.currentValue ?? "0")
     }
     
     override func loadView() {

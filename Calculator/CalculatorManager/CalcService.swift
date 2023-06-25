@@ -17,10 +17,10 @@ enum Operation {
 
 class CalcService {
 
-    var currentNumber = "0"
+    var currentValue = "0"
     var firstNumber = 0.0
     var secondNumber = 0.0
-    var resultNumber = ""
+    var result = ""
     var currentOperation: Operation = .noAction
     let displayView: MainViewController
     
@@ -29,50 +29,52 @@ class CalcService {
     }
     
     func numberAction(numberStr: String) {
-        if currentNumber != "0" {
-            currentNumber.append(numberStr)
-            displayView.updateDisplay(text: currentNumber)
+        if currentValue != "0" {
+            currentValue.append(numberStr)
+            displayView.updateDisplay(text: currentValue)
         } else {
-            currentNumber = numberStr
-            displayView.updateDisplay(text: currentNumber)
+            currentValue = numberStr
+            displayView.updateDisplay(text: currentValue)
         }
     }
 
     func makeCalculation(operation: Operation) {
         if currentOperation != .noAction {
-            if !currentNumber.isEmpty {
-                secondNumber = Double(currentNumber) ?? 0
+            if !currentValue.isEmpty {
+                secondNumber = Double(currentValue) ?? 0
                 switch operation {
                 case .addition:
-                    resultNumber = String(firstNumber + secondNumber)
+                    result = String(firstNumber + secondNumber)
                 case .substraction:
-                    resultNumber = String(firstNumber - secondNumber)
+                    result = String(firstNumber - secondNumber)
                 case .multiplication:
-                    resultNumber = String(firstNumber * secondNumber)
+                    result = String(firstNumber * secondNumber)
                 case .division:
-                    resultNumber = secondNumber != 0
-                    ? String(firstNumber / secondNumber)
-                    : "Error"
+                    result = String(firstNumber / secondNumber)
                 default:
                     break
                 }
                 
-                if let number = Double(resultNumber) {
-                    firstNumber =  number
-                    if firstNumber.truncatingRemainder(dividingBy: 1) == 0 {
-                        resultNumber = String(Int(Double(resultNumber) ?? 0 ))
-                    }
+                firstNumber = Double(result) ?? 0
+                if firstNumber.truncatingRemainder(dividingBy: 1) == 0 {
+                    result = String(Int(firstNumber))
                 }
                 
-                currentNumber = resultNumber
+                currentValue = result
+                displayView.updateDisplay(text: currentValue)
+                
                 currentOperation = .noAction
-                displayView.updateDisplay(text: currentNumber)
-            }
+            } 
         } else {
-            firstNumber = Double(currentNumber) ?? 0
-            currentNumber = ""
-            displayView.updateDisplay(text: currentNumber)
-            currentOperation = operation
+            firstNumber = Double(currentValue) ?? 0
+            displayView.updateDisplay(text: currentValue)
+            
+            if operation == .noAction {
+                displayView.updateDisplay(text: currentValue)
+            } else {
+                currentValue = ""
+                currentOperation = operation
+            }
         }
     }
 
@@ -97,42 +99,42 @@ class CalcService {
     }
 
     func acAction() {
-        currentNumber = "0"
+        currentValue = "0"
         firstNumber = 0.0
         secondNumber = 0.0
-        resultNumber = ""
+        result = ""
         currentOperation = .noAction
-        displayView.updateDisplay(text: currentNumber)
+        displayView.updateDisplay(text: currentValue)
     }
     
     func changeSign() {
-        var temp = currentNumber
+        var temp = currentValue
         
         if temp.contains("-") {
             let sign = ["-"]
             temp = String(temp.filter{ !sign.contains(String($0)) })
-            currentNumber = temp
+            currentValue = temp
             displayView.updateDisplay(text: temp)
         } else {
-            temp = "-" + currentNumber
-            currentNumber = temp
+            temp = "-" + currentValue
+            currentValue = temp
             displayView.updateDisplay(text: temp)
         }
     }
     
     func dot() {
-        if currentNumber.contains(".") {
+        if currentValue.contains(".") {
             return
         } else {
-            currentNumber += "."
-            displayView.updateDisplay(text: currentNumber)
+            currentValue += "."
+            displayView.updateDisplay(text: currentValue)
         }
     }
     
     func percent() {
-        currentNumber = String((Double(currentNumber) ?? 0) / 100)
-        resultNumber = currentNumber
-        firstNumber = Double(resultNumber) ?? 0
-        displayView.updateDisplay(text: currentNumber)
+        currentValue = String((Double(currentValue) ?? 0) / 100)
+        result = currentValue
+        firstNumber = Double(result) ?? 0
+        displayView.updateDisplay(text: currentValue)
     }
 }

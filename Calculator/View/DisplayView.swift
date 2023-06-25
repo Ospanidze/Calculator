@@ -19,7 +19,8 @@ final class DisplayView: UIView {
         let textField = UITextField()
         textField.textAlignment = .right
         textField.font = UIFont.systemFont(ofSize: 40)
-        textField.enablesReturnKeyAutomatically = true
+        //textField.enablesReturnKeyAutomatically = true
+        textField.text = "0"
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
