@@ -18,11 +18,12 @@ enum Operation {
 class CalcService {
 
     var currentValue = "0"
-    var firstNumber = 0.0
-    var secondNumber = 0.0
-    var result = ""
-    var currentOperation: Operation = .noAction
     let displayView: MainViewController
+    private var firstNumber = 0.0
+    private var secondNumber = 0.0
+    private var result = ""
+    private var currentOperation: Operation = .noAction
+    
     
     init(displayView: MainViewController) {
         self.displayView = displayView
@@ -30,8 +31,10 @@ class CalcService {
     
     func numberAction(numberStr: String) {
         if currentValue != "0" {
-            currentValue.append(numberStr)
-            displayView.updateDisplay(text: currentValue)
+            if currentValue.count <= 8 {
+                currentValue.append(numberStr)
+                displayView.updateDisplay(text: currentValue)
+            }
         } else {
             currentValue = numberStr
             displayView.updateDisplay(text: currentValue)
@@ -41,7 +44,7 @@ class CalcService {
     func makeCalculation(operation: Operation) {
         if currentOperation != .noAction {
             if !currentValue.isEmpty {
-                secondNumber = Double(currentValue) ?? 0
+                secondNumber = currentValue.convertTextInDouble()
                 switch operation {
                 case .addition:
                     result = String(firstNumber + secondNumber)
@@ -55,20 +58,15 @@ class CalcService {
                     break
                 }
                 
-                firstNumber = Double(result) ?? 0
-                if firstNumber.truncatingRemainder(dividingBy: 1) == 0 {
-                    result = String(Int(firstNumber))
-                }
+                firstNumber = result.convertTextInDouble()
                 
-                currentValue = result
+                currentValue = firstNumber.formatterForm
                 displayView.updateDisplay(text: currentValue)
                 
                 currentOperation = .noAction
             } 
         } else {
-            firstNumber = Double(currentValue) ?? 0
-            displayView.updateDisplay(text: currentValue)
-            
+            firstNumber = currentValue.convertTextInDouble()
             if operation == .noAction {
                 displayView.updateDisplay(text: currentValue)
             } else {
