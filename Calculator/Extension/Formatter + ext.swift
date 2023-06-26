@@ -16,10 +16,11 @@ extension Formatter {
         formatter.locale = Locale.current
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = " "
-        formatter.maximumIntegerDigits = 10
-        formatter.minimumIntegerDigits = 5
+        formatter.maximumIntegerDigits = 9
         formatter.maximumFractionDigits = 9
-        formatter.maximumFractionDigits = 3
+        
+        formatter.minimumIntegerDigits = 1
+        formatter.minimumFractionDigits = 0
         return formatter
     }()
 }
